@@ -1,10 +1,12 @@
 package com.spartaglobal.toolsqa;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AutomationFormPage {
@@ -22,14 +24,17 @@ public class AutomationFormPage {
     private final By toolElements = By.name("tool");
     private final By hybridFrameworkDownload = By.linkText("Selenium Automation Hybrid Framework");
     private final By testFileDownload = By.linkText("Test File to Download");
+    private final By continentElements = By.id("continents");
     private final String practiceFormURL = "https://www.toolsqa.com/automation-practice-form/";
     private final String downLoadURL = "http://toolsqa.com/wp-content/uploads/2014/04/OnlineStore.zip";
+    private int numOfKeys;
 
 
     private List<String> sexRadioButtonElements;
     private List<String> experianceRadioButtonElements;
     private List<String> toolButtonElements;
     private List<String> professionButtonElements;
+    private List<String> continentsElements;
 
 
     public AutomationFormPage(WebDriver driver) {
@@ -220,7 +225,7 @@ public class AutomationFormPage {
         return this;
     }
 
-    public boolean checkprofessionButton (String selectedProfession){
+    public boolean checkprofessionButton(String selectedProfession) {
         if (professionButtonElements == null) {
             getProfessionElements();
         }
@@ -253,7 +258,7 @@ public class AutomationFormPage {
         return this;
     }
 
-    public boolean checktoolButton (String selectedTool){
+    public boolean checktoolButton(String selectedTool) {
         if (toolButtonElements == null) {
             getToolElements();
         }
@@ -265,37 +270,87 @@ public class AutomationFormPage {
         return driver.findElement(By.id("tool-" + toolButtonElements.indexOf(selectedTool))).isSelected();
     }
 
-    public boolean seleniumAutomationHybridFrameworkDisplayed(){
+    public boolean seleniumAutomationHybridFrameworkDisplayed() {
         return driver.findElement(hybridFrameworkDownload).isDisplayed();
     }
 
-    public String seleniumAutomationHybridFrameworkDisplayedTextTest(){
+    public String seleniumAutomationHybridFrameworkDisplayedTextTest() {
         return driver.findElement(hybridFrameworkDownload).getText();
     }
 
-    public AutomationFormPage HybridFrameworkClick(){
+    public AutomationFormPage HybridFrameworkClick() {
         findElement(hybridFrameworkDownload).click();
         return this;
     }
 
-    public AutomationFormPage goToDownLoadPage(){
+    public AutomationFormPage goToDownLoadPage() {
         driver.navigate().to(downLoadURL);
         return this;
     }
-    public String getHybridFrameWorkURLAttribute(){
+
+    public String getHybridFrameWorkURLAttribute() {
         return driver.findElement(hybridFrameworkDownload).getAttribute("href");
     }
 
-    public boolean seleniumAutomationTestFileDisplayed(){
+    public boolean seleniumAutomationTestFileDisplayed() {
         return driver.findElement(testFileDownload).isDisplayed();
     }
 
-    public String seleniumAutomationTestFileDisplayedTextTest(){
+    public String seleniumAutomationTestFileDisplayedTextTest() {
         return driver.findElement(testFileDownload).getText();
     }
 
-    public String getTestFileDisplayURLAttribute(){
+    public String getTestFileDisplayURLAttribute() {
         return driver.findElement(testFileDownload).getAttribute("href");
+    }
+
+    public List<String> getContinentElements() {
+        ArrayList<String> continents = new ArrayList<>();
+
+
+        WebElement dropdown = driver.findElement(continentElements);
+        List<WebElement> continentOptions = dropdown.findElements(By.tagName("option"));
+        Iterator<WebElement> it = continentOptions.iterator();
+        while (it.hasNext()) {
+            continents.add(it.next().getAttribute("value"));
+        }
+        continentsElements = continents;
+        return continentsElements;
+    }
+
+
+//        for (WebElement continent : driver.findElements(continentElements)) {
+//            continents.add(continent.getText());
+//        }
+//        continentsElements = continents;
+//
+//        return continentsElements;
+//
+//    }
+
+    private void selectContinent() {
+        driver.findElement(continentElements).click();
+    }
+
+    public AutomationFormPage selectSpecificContinent(String continent) {
+        getContinentElements();
+        selectContinent();
+        int numOfDownKeys = continentsElements.indexOf(continent);
+        numOfKeys = numOfDownKeys;
+        int index = 0;
+        if (numOfDownKeys == 0) {
+            return this;
+        } else {
+            while (index < numOfDownKeys) {
+                driver.findElement(continentElements).sendKeys(Keys.DOWN);
+                index++;
+            }
+            driver.findElement(continentElements).sendKeys(Keys.ENTER);
+            return this;
+        }
+    }
+    public String getStringOfSpecificContinent(){
+        return driver.findElement(continentElements).getText();
     }
 }
 

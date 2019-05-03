@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.List;
+
 public class FormPageTest {
 
     private ToolsHome toolsWebsite;
@@ -203,6 +205,12 @@ public class FormPageTest {
         setup();
         Assert.assertEquals(toolsWebsite.AutomationFormPage().goToHomePage().getTestFileDisplayURLAttribute(), "http://toolsqa.com/wp-content/uploads/2016/09/Test-File-to-Download.xlsx");
     }
+
+//    @Test
+//    public void checkSpecificContinent(){
+//        setup();
+//        Assert.assertEquals(toolsWebsite.AutomationFormPage().goToHomePage().selectSpecificContinent(2).getStringOfSpecificContinent(), "Africa");
+//    }
 
 
 
